@@ -54,6 +54,7 @@ class Player(BaseObject):
         # когда игрок прилетает сверху на землю, останавливаем его
         if self.y >= GROUND_LEVEL:
             self.on_the_ground = True
+            self.y = GROUND_LEVEL
             self.Vy = 0
         else:
             if self.on_the_ground:

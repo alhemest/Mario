@@ -13,9 +13,9 @@ from Brick import *
 class Main():
     def __init__(self, screen):
         self.screen = screen 
-        self.background = pygame.image.load("data/images/background.png")
+        self.background = pygame.transform.scale(pygame.image.load("data/images/background.png"), (SCREEN_WIDTH, SCREEN_HEIGHT))
         self.player = Player()
-        self.objects = [Brick()]
+        self.objects = [Brick(500, 350)]
         self.main_loop()
         
     def main_loop(self):
