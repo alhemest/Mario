@@ -9,13 +9,14 @@ from Player import *
 from Constants import *
 from pygame.constants import K_RIGHT, K_LEFT, K_SPACE
 from Brick import *
+from SecretBrick import *
 
 class Main():
     def __init__(self, screen):
         self.screen = screen 
         self.background = pygame.transform.scale(pygame.image.load("data/images/background.png"), (SCREEN_WIDTH, SCREEN_HEIGHT))
         self.player = Player()
-        self.objects = [Brick(500, 350)]
+        self.objects = [Brick(500, 350), SecretBrick(300, 350)]
         self.main_loop()
         
     def main_loop(self):

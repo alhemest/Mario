@@ -7,8 +7,12 @@ import pygame
 from Constants import *
 
 class BaseObject(object):
-    def __init__(self):
-        pass
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+        self.x_size = 40
+        self.y_size = 40
+        self.image = pygame.transform.scale(self.image, (self.x_size, self.y_size))
     
     def render(self, screen):   
         screen.blit(self.image, (self.x, self.y))
