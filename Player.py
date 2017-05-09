@@ -6,6 +6,7 @@ Created on 30 апр. 2017 г.
 import pygame
 from Constants import *
 from BaseObject import *
+from gc import get_objects
 
 class Player(BaseObject):
     def __init__(self):
@@ -45,11 +46,34 @@ class Player(BaseObject):
         self.x += self.Vx
         self.y += self.Vy
               
+        self.in_air_detect(objects)
+        
         # когда игрок прилетает сверху на землю, останавливаем его
         if self.y >= GROUND_LEVEL:
             self.on_the_ground = True
             self.Vy = 0
         
+        self.calculate_collisions(objects)
+        
+        # действие гравитации, если игрок не на земле
+        if not self.on_the_ground:
+            self.Vy += G  
+        
+                
+        # размещаем картинку игрока по текущим координатам игрока    
+        screen.blit(self.images[self.position], (self.x, self.y))
+
+    def in_air_detect(self, objects):
+        for i in range(int(self.x), int(self.x + self.x_size)):
+            point = (i, self.y + self.y_size)
+            for obj in objects:
+                if obj.is_inside(point):
+                    self.on_the_ground = True
+                    return
+                
+        self.on_the_ground = False
+ 
+    def calculate_collisions(self, objects):
         # взаимодействие игрока с кирпичем по его боковым точкам
         for obj in objects: 
             # Если произошло столкновение
@@ -79,12 +103,3 @@ class Player(BaseObject):
                     self.Vy = 0
                     if delta_y < 0:
                         self.on_the_ground = True
-
-        # действие гравитации, если игрок не на земле
-        if not self.on_the_ground:
-            self.Vy += G  
-        
-                
-        # размещаем картинку игрока по текущим координатам игрока    
-        screen.blit(self.images[self.position], (self.x, self.y))
- 
