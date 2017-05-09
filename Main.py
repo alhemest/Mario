@@ -54,11 +54,9 @@ class Main():
                 ", " +
                 str(self.player.y) +
                 "). " +
-                "Brick: (" +
-                str(self.objects[0].x) +
-                ", " +
-                str(self.objects[0].y + self.objects[0].y_size) +
-                "). ",
+                "on_the ground: " +
+                str(self.player.on_the_ground) +
+                ". ",
                 (0, 0)
             )
            

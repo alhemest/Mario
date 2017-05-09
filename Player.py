@@ -18,6 +18,7 @@ class Player(BaseObject):
         self.Vy = 0
         self.x_size = 45
         self.y_size = 60  
+        self.is_moving = 0
         
         # Загружаем изображения игрока
         self.images = []
@@ -28,30 +29,36 @@ class Player(BaseObject):
     def move(self, direction):
         if direction == RIGHT:
             self.position = RIGHT
-            self.Vx = 1
+            self.is_moving = 1
         if direction == LEFT:
             self.position = LEFT
-            self.Vx = -1
+            self.is_moving = -1
         if direction == UP:
             if self.on_the_ground == True:
                 self.Vy = -JUMP_SPEED
                 self.on_the_ground = False
             
     def stop(self):
-        self.Vx = 0
+        self.is_moving = 0
         
         # Отрисовка игрока
     def render(self, screen, objects):
+        # Придаем горизонтальную скорость, если игрок в состоянии движения
+        self.Vx = self.is_moving
+        
         # Вычисление новых координат в зависимости от текущей скорости
         self.x += self.Vx
         self.y += self.Vy
               
-        self.in_air_detect(objects)
         
         # когда игрок прилетает сверху на землю, останавливаем его
         if self.y >= GROUND_LEVEL:
             self.on_the_ground = True
             self.Vy = 0
+        else:
+            if self.on_the_ground:
+                self.in_air_detect(objects)
+
         
         self.calculate_collisions(objects)
         
@@ -65,12 +72,12 @@ class Player(BaseObject):
 
     def in_air_detect(self, objects):
         for i in range(int(self.x), int(self.x + self.x_size)):
-            point = (i, self.y + self.y_size)
+            point = (i, self.y + self.y_size + 1)
             for obj in objects:
                 if obj.is_inside(point):
                     self.on_the_ground = True
                     return
-                
+        print("IN AIR!")
         self.on_the_ground = False
  
     def calculate_collisions(self, objects):
@@ -78,6 +85,7 @@ class Player(BaseObject):
         for obj in objects: 
             # Если произошло столкновение
             if self.is_collision(obj):
+                print("Collision!")
                 # Телепортируем игрока к ближайшей границе
                 # Обнуляем горизонтальную либо вертикальную скорость
                 # Если мы прилетели сверху, то устанавливаем флаг on_the_ground
