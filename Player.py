@@ -7,6 +7,7 @@ import pygame
 from Constants import *
 from BaseObject import *
 from gc import get_objects
+from time import sleep
 
 class Player(BaseObject):
     def __init__(self):
@@ -19,6 +20,8 @@ class Player(BaseObject):
         self.x_size = 45
         self.y_size = 60  
         self.is_moving = 0
+        self.sound = {"jump": pygame.mixer.Sound("data/sounds/smb_jump-small.wav"), 
+                      "bump": pygame.mixer.Sound("data/sounds/smb_bump.wav")}
         
         # Загружаем изображения игрока
         self.images = []
@@ -37,6 +40,7 @@ class Player(BaseObject):
             if self.on_the_ground == True:
                 self.Vy = -JUMP_SPEED
                 self.on_the_ground = False
+                self.sound["jump"].play()
             
     def stop(self):
         self.is_moving = 0
@@ -112,3 +116,5 @@ class Player(BaseObject):
                     self.Vy = 0
                     if delta_y < 0:
                         self.on_the_ground = True
+                    else: 
+                        self.sound["bump"].play()

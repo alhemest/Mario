@@ -17,7 +17,20 @@ class Main():
         self.background = pygame.transform.scale(pygame.image.load("data/images/background.png"), (SCREEN_WIDTH, SCREEN_HEIGHT))
         self.player = Player()
         self.objects = [Brick(500, 350), SecretBrick(300, 350)]
+        #self.load_world('1-1')
         self.main_loop()
+    
+    def load_world(self, filename):
+        # Готовим массив для объектов
+        self.objects = []
+        # Открываем файлик
+        
+        # Для каждой строки
+        
+        # Для каждого символа
+        
+        # Если это кирпич - создать кирпич!
+        # self.objects.add(Brick(x, y))
         
     def main_loop(self):
         while True:
@@ -77,7 +90,12 @@ class Main():
         self.screen.blit(text, point)
 
 print ("Hello World!")
+
+# Магия со stackoverflow, исправляющую задержку звука
+pygame.mixer.pre_init(44100, -16, 2, 512)
+pygame.mixer.init()
 pygame.init()
 
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+
 game = Main(screen)
