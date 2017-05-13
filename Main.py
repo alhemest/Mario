@@ -15,21 +15,37 @@ class Main():
     def __init__(self, screen):
         self.screen = screen 
         self.background = pygame.transform.scale(pygame.image.load("data/images/background.png"), (SCREEN_WIDTH, SCREEN_HEIGHT))
-        self.player = Player()
-        self.objects = [Brick(500, 350), SecretBrick(300, 350)]
-        #self.load_world('1-1')
+        self.load_world('1-1')
         self.main_loop()
     
     def load_world(self, filename):
         # Готовим массив для объектов
         self.objects = []
         # Открываем файлик
+        f = open("data/maps/" + filename + ".txt")
         
         # Для каждой строки
-        
-        # Для каждого символа
-        
-        # Если это кирпич - создать кирпич!
+        row = 0
+        for line in f:
+            row += 1
+            col = 0
+            # Для каждого символа
+            for c in line:
+                col += 1
+                x = col * 40
+                y = row * 40
+                
+                obj = False     
+                # Если это кирпич - создать кирпич!
+                if c == 'b':
+                    obj = Brick(x, y)
+                elif c == '?':
+                    obj = SecretBrick(x, y)
+                elif c == 'm':
+                    self.player = Player(x, y)
+                
+                if obj:
+                    self.objects.append(obj)
         # self.objects.add(Brick(x, y))
         
     def main_loop(self):

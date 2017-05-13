@@ -10,11 +10,11 @@ from gc import get_objects
 from time import sleep
 
 class Player(BaseObject):
-    def __init__(self):
+    def __init__(self, x, y):
         self.position = RIGHT
         self.on_the_ground = True
-        self.x = SCREEN_WIDTH / 2
-        self.y = GROUND_LEVEL
+        self.x = x
+        self.y = y
         self.Vx = 0
         self.Vy = 0
         self.x_size = 45
