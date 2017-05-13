@@ -20,14 +20,21 @@ class Player(BaseObject):
         self.x_size = 45
         self.y_size = 60  
         self.is_moving = 0
-        self.sound = {"jump": pygame.mixer.Sound("data/sounds/smb_jump-small.wav"), 
-                      "bump": pygame.mixer.Sound("data/sounds/smb_bump.wav")}
+        self.sound = {
+            "jump": pygame.mixer.Sound("data/sounds/smb_jump-small.wav"), 
+            "bump": pygame.mixer.Sound("data/sounds/smb_bump.wav")
+            }
         
         # Загружаем изображения игрока
-        self.images = []
-        images_pack = ["MarioLeft.png", "MarioRight.png"]
-        for image in images_pack: 
-            self.images.append( pygame.image.load("data/images/" + image) )
+        self.images = {
+            'small':        pygame.image.load("data/images/MarioRight.png"),
+            'small_jump':   pygame.image.load("data/images/MarioJump.png"),
+            }
+        
+        for key in self.images: 
+            #ресайз всех загруженных в список изображений
+            self.images[key] = pygame.transform.scale(self.images[key], (self.x_size, self.y_size))
+            
             
     def move(self, direction):
         if direction == RIGHT:
@@ -41,6 +48,7 @@ class Player(BaseObject):
                 self.Vy = -JUMP_SPEED
                 self.on_the_ground = False
                 self.sound["jump"].play()
+                
             
     def stop(self):
         self.is_moving = 0
@@ -72,8 +80,17 @@ class Player(BaseObject):
             self.Vy += G  
         
                 
-        # размещаем картинку игрока по текущим координатам игрока    
-        screen.blit(self.images[self.position], (self.x, self.y))
+        # размещаем картинку игрока по текущим координатам игрока 
+        if self.on_the_ground:
+            image = self.images['small']
+        else:
+            image = self.images['small_jump']           
+        
+        # При необходимости отражаем картинку по вертикали (чтобы смотрела влево)
+        if self.position == LEFT:
+            image = pygame.transform.flip(image, True, False)
+                
+        screen.blit(image, (self.x, self.y))
 
     def in_air_detect(self, objects):
         for i in range(int(self.x), int(self.x + self.x_size)):
