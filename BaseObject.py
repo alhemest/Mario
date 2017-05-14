@@ -12,10 +12,30 @@ class BaseObject(object):
         self.y = y
         self.x_size = 40
         self.y_size = 40
-        self.image = pygame.transform.scale(self.image, (self.x_size, self.y_size))
+        self.image_no = 0 # порядковый номер текущей картинки в массиве картинок self.images
+        self.frame_no = 0 # счетчик текущего кадра
+        
+        # если у нас одна картинка self.image, делаем ее ресайз
+        if hasattr(self, 'image'): 
+            self.image = pygame.transform.scale(self.image, (self.x_size, self.y_size))
     
+        # если у нас массив кртинок self.images, делаем  ресайз каждого элемента
+        if hasattr(self, 'images'):
+            i = 0
+            for image in self.images:
+                self.images[i] = pygame.transform.scale(image, (self.x_size, self.y_size))
+                i += 1
+    
+    def choose_image(self, reload_delay):
+        image_count = len(self.images) # считаем колисество картинок в массиве
+        
+        if self.frame_no % reload_delay == 0: # когда остаток отделения равен 0
+            self.image_no = (self.image_no + 1) % image_count # вычисляем номер следующей картинки
+            self.image = self.images[self.image_no] # меняем картинку на следующую 
+                               
     def render(self, screen):   
         screen.blit(self.image, (self.x, self.y))
+        self.frame_no += 1 # после каждой отрисовки инкрементируем счетчик кадров
            
     # Проверка на столкновение с объектом    
     def is_collision(self, obj):
