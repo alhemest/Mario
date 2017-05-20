@@ -26,12 +26,13 @@ class BaseObject(object):
                 self.images[i] = pygame.transform.scale(image, (self.x_size, self.y_size))
                 i += 1
     
-    def choose_image(self, reload_delay):
-        image_count = len(self.images) # считаем колисество картинок в массиве
+    def choose_image(self, images, reload_delay):
+        image_count = len(images) # считаем количество картинок в массиве
         
         if self.frame_no % reload_delay == 0: # когда остаток отделения равен 0
             self.image_no = (self.image_no + 1) % image_count # вычисляем номер следующей картинки
-            self.image = self.images[self.image_no] # меняем картинку на следующую 
+        
+        self.image = images[self.image_no] # меняем картинку на следующую 
                                
     def render(self, screen):   
         screen.blit(self.image, (self.x, self.y))
@@ -64,8 +65,8 @@ class BaseObject(object):
         x = point[0]
         y = point[1]
         delta = 10
-        if     (x > self.x and x < self.x + self.x_size) \
-            and (y > self.y and y < self.y + self.y_size):
+        if     (x > self.x and x <= self.x + self.x_size) \
+            and (y > self.y and y <= self.y + self.y_size):
             # Мы выяснили, что точка (х, у) находится внутри объекта
             return True
         else:

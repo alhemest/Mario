@@ -11,38 +11,59 @@ from time import sleep
 
 class Player(BaseObject):
     def __init__(self, x, y):
+        BaseObject.__init__(self, x, y)
         self.position = RIGHT
         self.on_the_ground = True
-        self.x = x
-        self.y = y
         self.Vx = 0
         self.Vy = 0
-        self.x_size = 45
-        self.y_size = 60  
         self.is_moving = 0
         self.sound = {
             "jump": pygame.mixer.Sound("data/sounds/smb_jump-small.wav"), 
             "bump": pygame.mixer.Sound("data/sounds/smb_bump.wav")
             }
-        
+         
         # Загружаем изображения игрока
         self.images = {
             'small':        pygame.image.load("data/images/MarioRight.png"),
             'small_jump':   pygame.image.load("data/images/MarioJump.png"),
+            'small_run':    [  
+                               #pygame.image.load("data/images/MarioRun.png"),
+                               pygame.image.load("data/images/MarioRun2.png"),
+                               pygame.image.load("data/images/MarioRun1.png"),
+                               
+                            ],
             }
         
-        for key in self.images: 
-            #ресайз всех загруженных в список изображений
-            self.images[key] = pygame.transform.scale(self.images[key], (self.x_size, self.y_size))
-            
+        
+        for key in self.images:
+            if isinstance(self.images[key], list):
+                # Если у нас массив картинок
+                for i in range(0, len(self.images[key])):
+                    w = self.images[key][i].get_width()
+                    h = self.images[key][i].get_height()
+                    y = self.y_size
+                    x = int(w * self.y_size / h)
+                    # ресайз всех загруженных в список изображений
+                    self.images[key][i] = pygame.transform.scale(self.images[key][i], (x, y))
+            else:
+                # Если у нас одиночная картинка
+                w = self.images[key].get_width()
+                h = self.images[key].get_height()
+                y = self.y_size
+                x = int(w * self.y_size / h)
+                # ресайз всех загруженных в список изображений
+                self.images[key] = pygame.transform.scale(self.images[key], (x, y))
+        
+        
+           
             
     def move(self, direction):
         if direction == RIGHT:
             self.position = RIGHT
-            self.is_moving = 1
+            self.is_moving = 2
         if direction == LEFT:
             self.position = LEFT
-            self.is_moving = -1
+            self.is_moving = -2
         if direction == UP:
             if self.on_the_ground == True:
                 self.Vy = -JUMP_SPEED
@@ -82,15 +103,19 @@ class Player(BaseObject):
                 
         # размещаем картинку игрока по текущим координатам игрока 
         if self.on_the_ground:
-            image = self.images['small']
+            self.image = self.images['small']
+            if self.is_moving != 0:
+                self.choose_image(self.images['small_run'], reload_delay=7) 
         else:
-            image = self.images['small_jump']           
+            self.image = self.images['small_jump']           
+        
+        
         
         # При необходимости отражаем картинку по вертикали (чтобы смотрела влево)
         if self.position == LEFT:
-            image = pygame.transform.flip(image, True, False)
+            self.image = pygame.transform.flip(self.image, True, False)
                 
-        screen.blit(image, (self.x, self.y))
+        BaseObject.render(self, screen)
 
     def in_air_detect(self, objects):
         for i in range(int(self.x), int(self.x + self.x_size)):
