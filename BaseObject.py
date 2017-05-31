@@ -10,8 +10,9 @@ class BaseObject(object):
     def __init__(self, x, y):
         self.x = x
         self.y = y
-        self.x_size = 40
-        self.y_size = 40
+        if not hasattr(self, 'x_size'):
+            self.x_size = 40
+            self.y_size = 40
         self.image_no = 0 # порядковый номер текущей картинки в массиве картинок self.images
         self.frame_no = 0 # счетчик текущего кадра
         

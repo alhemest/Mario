@@ -10,6 +10,7 @@ from Constants import *
 from pygame.constants import K_RIGHT, K_LEFT, K_SPACE
 from Brick import *
 from SecretBrick import *
+from Cloud import *
 
 class Main():
     def __init__(self, screen):
@@ -43,6 +44,8 @@ class Main():
                     obj = SecretBrick(x, y)
                 elif c == 'm':
                     self.player = Player(x, y)
+                elif c == 'c':
+                    obj = Cloud(x, y)
                 
                 if obj:
                     self.objects.append(obj)
