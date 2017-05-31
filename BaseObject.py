@@ -55,18 +55,24 @@ class BaseObject(object):
     
     def get_vertexes(self):
         return [
-                    (self.x,                self.y), 
-                    (self.x + self.x_size,  self.y), 
-                    (self.x,                self.y + self.y_size),
-                    (self.x + self.x_size,  self.y + self.y_size)
+                    # вершины объекта
+                    (self.x,                 self.y), 
+                    (self.x + self.x_size,   self.y), 
+                    (self.x,                 self.y + self.y_size),
+                    (self.x + self.x_size,   self.y + self.y_size),
+                    # точки в середине сторон объекта
+                    (self.x + self.x_size/2, self.y), 
+                    (self.x + self.x_size,   self.y + self.y_size/2),
+                    (self.x + self.x_size/2, self.y + self.y_size),
+                    (self.x,                 self.y + self.y_size/2),
                 ]
         
     def is_inside(self, point):
         x = point[0]
         y = point[1]
         delta = 10
-        if     (x > self.x and x <= self.x + self.x_size) \
-            and (y > self.y and y <= self.y + self.y_size):
+        if     (x > self.x and x < self.x + self.x_size) \
+           and (y > self.y and y < self.y + self.y_size):
             # Мы выяснили, что точка (х, у) находится внутри объекта
             return True
         else:

@@ -132,31 +132,32 @@ class Player(BaseObject):
         for obj in objects: 
             # Если произошло столкновение
             if self.is_collision(obj):
-                print("Collision!")
                 # Телепортируем игрока к ближайшей границе
                 # Обнуляем горизонтальную либо вертикальную скорость
                 # Если мы прилетели сверху, то устанавливаем флаг on_the_ground
                 delta_x_left = obj.x - (self.x + self.x_size) # лев стены, прав игрока 
                 delta_x_right = (obj.x + obj.x_size) - self.x # прав стены, лев игрока
-                if (abs(delta_x_left) < abs(delta_x_right)):
+                if (abs(delta_x_left) < abs(delta_x_right)):  # вычисление более близкого расстояния для телепортации влево или вправо
                     delta_x = delta_x_left
                 else:
                     delta_x = delta_x_right
              
                 delta_y_up = obj.y - (self.y + self.y_size)  # верх стены, низ игрока
                 delta_y_down = (obj.y + obj.y_size) - self.y # них стены, верх игрока
-                if (abs(delta_y_up) < abs(delta_y_down)):
+                if (abs(delta_y_up) < abs(delta_y_down)):    # вычисление более близкого расстояния для телепортации вверх или вниз
                     delta_y = delta_y_up
                 else:
                     delta_y = delta_y_down
             
-                if (abs(delta_x) < abs(delta_y)):
+                if (abs(delta_x) < abs(delta_y)):  # вычисление более близкого расстояния для телепортации по горизонтали или вертикали
                     self.x += delta_x
                     self.Vx = 0
                 else:
                     self.y += delta_y
                     self.Vy = 0
                     if delta_y < 0:
+                        print("ground")
                         self.on_the_ground = True
-                    else: 
+                    else:
+                        print("sound") 
                         self.sound["bump"].play()
