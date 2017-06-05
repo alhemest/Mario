@@ -45,7 +45,9 @@ class Main():
                 elif c == 'm':
                     self.player = Player(x, y)
                 elif c == 'c':
-                    obj = Cloud(x, y)
+                    obj = Cloud(x, y, is_big=False)
+                elif c == 'C':
+                    obj = Cloud(x, y, is_big=True)   
                 
                 if obj:
                     self.objects.append(obj)
@@ -74,12 +76,10 @@ class Main():
                 
     def render(self):
         self.screen.blit(self.background, (0, 0))
-        self.player.render(self.screen, self.objects)
-        
         for obj in self.objects: 
-           obj.render(self.screen) 
-           
-        
+            obj.render(self.screen)  
+        self.player.render(self.screen, self.objects)
+                
         if DEBUG:
             self.print_text(
                 "Mario (" +

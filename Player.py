@@ -121,7 +121,8 @@ class Player(BaseObject):
         for i in range(int(self.x), int(self.x + self.x_size)):
             point = (i, self.y + self.y_size + 1)
             for obj in objects:
-                if obj.is_inside(point):
+                # проверяем, что объект не является фоном и что точка находится внутри объекта
+                if obj.is_background == False and obj.is_inside(point):
                     self.on_the_ground = True
                     return
         print("IN AIR!")
@@ -129,9 +130,9 @@ class Player(BaseObject):
  
     def calculate_collisions(self, objects):
         # взаимодействие игрока с кирпичем по его боковым точкам
-        for obj in objects: 
-            # Если произошло столкновение
-            if self.is_collision(obj):
+        for obj in objects:
+            # Если объект не фон и произошло столкновение
+            if obj.is_background == False and self.is_collision(obj):
                 # Телепортируем игрока к ближайшей границе
                 # Обнуляем горизонтальную либо вертикальную скорость
                 # Если мы прилетели сверху, то устанавливаем флаг on_the_ground

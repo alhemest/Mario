@@ -10,6 +10,7 @@ class BaseObject(object):
     def __init__(self, x, y):
         self.x = x
         self.y = y
+        self.is_background = False
         if not hasattr(self, 'x_size'):
             self.x_size = 40
             self.y_size = 40
@@ -68,7 +69,7 @@ class BaseObject(object):
                     (self.x,                 self.y + self.y_size/2),
                 ]
         
-    def is_inside(self, point):
+    def is_inside(self, point):       
         x = point[0]
         y = point[1]
         delta = 10
